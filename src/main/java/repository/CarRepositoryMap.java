@@ -3,6 +3,7 @@ package repository;
 import domain.Car;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +27,18 @@ public class CarRepositoryMap implements CarRepository{
 
     @Override
     public List<Car> getAll() {
-        return database.values().stream().toList();
+        List<Car> cars = new ArrayList<Car>();
+        for(Car car: database.values()){
+            cars.add(car);
+        }
+        return cars;
     }
 
     @Override
     public Car update(Car car) {
-        database.replace(car.getId(), car);
-        return database.get(car.getId());
+
+        if(database.containsValue(car));
+        return database.put(car.getId(), car);
     }
 
     @Override

@@ -97,8 +97,8 @@ public class CarRepositoryDB implements CarRepository {
     @Override
     public Car update(Car car) {
         try (Connection connection = getConnection()) {
-            String query = String.format("UPDATE car SET price=%s WHERE brand='%s' AND year=%d AND id=%d",
-                    car.getPrice(), car.getBrand(), car.getYear(), car.getId());
+            String query = String.format("UPDATE car SET price=%s WHERE id=%d",
+                    car.getPrice(), car.getId());
             Statement statement = connection.createStatement();
             statement.execute(query);
 

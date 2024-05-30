@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import repository.CarRepository;
 import repository.CarRepositoryDB;
+import repository.CarRepositoryHibernate;
 import repository.CarRepositoryMap;
 import service.CarService;
 import service.CarServiceImpl;
@@ -18,7 +19,7 @@ import java.util.Map;
 
 public class CarServlet extends HttpServlet {
 
-    private CarService service = new CarServiceImpl(new CarRepositoryDB());
+    private CarService service = new CarServiceImpl(new CarRepositoryHibernate());
 
     // Получение автомобиля или всех автомобилей
     // GET http://localhost:8080/cars?id=3 - один авто
@@ -32,8 +33,13 @@ public class CarServlet extends HttpServlet {
         Map<String, String[]> params = req.getParameterMap();
 
         if (params.isEmpty()){
-            List<Car> list = service.getAll();
-            resp.getWriter().write(list.toString());
+            service.getAll().forEach(x -> {
+                try {
+                    resp.getWriter().write(x.toString() + "\n");
+                }catch (Exception e){
+                    throw new RuntimeException(e);
+                }
+            });
         }
         else {
             Long id = Long.parseLong(params.get("id")[0]);
@@ -63,9 +69,9 @@ public class CarServlet extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ObjectMapper mapper = new ObjectMapper();
         Car car = mapper.readValue(req.getReader(), Car.class);
-        service.update(car);
+        Car myCar = service.update(car);
 
-        resp.getWriter().write(car.toString());
+        resp.getWriter().write(myCar.toString());
     }
 
 
