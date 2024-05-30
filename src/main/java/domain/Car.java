@@ -19,6 +19,13 @@ public class Car {
         this.year = year;
     }
 
+    public Car(Long id, String brand, BigDecimal price, int year) {
+        this.id = id;
+        this.brand = brand;
+        this.price = price;
+        this.year = year;
+    }
+
     public Long getId() {
         return id;
     }
